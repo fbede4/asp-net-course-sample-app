@@ -19,6 +19,8 @@ namespace ChatApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ChatApp.Api", Version = "v1" });
@@ -43,6 +45,7 @@ namespace ChatApp.Api
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
             });
         }
     }
