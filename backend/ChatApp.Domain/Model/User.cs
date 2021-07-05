@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ChatApp.Model
+namespace ChatApp.Domain.Model
 {
     public class User
     {

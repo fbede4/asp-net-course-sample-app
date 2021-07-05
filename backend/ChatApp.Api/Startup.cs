@@ -1,7 +1,12 @@
-using ChatApp.Api.Configuration;
-using ChatApp.Api.Dal;
 using ChatApp.Api.Middlewares;
-using ChatApp.Api.Services;
+using ChatApp.Application.Interfaces;
+using ChatApp.Bll.Services;
+using ChatApp.Dal;
+using ChatApp.Dal.Repositories;
+using ChatApp.Dal.UoW;
+using ChatApp.Domain.Configuration;
+using ChatApp.Domain.Repositories;
+using ChatApp.Domain.UoW;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +36,17 @@ namespace ChatApp.Api
                 opt.UseSqlite("Data Source = chatapp.db");
             });
 
-            services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IUnitOfWork>(serviceProvider =>
+            {
+                var dbContext = serviceProvider.GetRequiredService<ChatAppDbContext>();
+                return new UnitOfWork(dbContext);
+            });
+
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
+
+            services.AddScoped<IMessagesAppService, MessagesAppService>();
+            services.AddScoped<IUsersAppService, UsersAppService>();
 
             services.AddControllers();
 

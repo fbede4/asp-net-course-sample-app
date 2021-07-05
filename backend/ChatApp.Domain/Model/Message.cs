@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace ChatApp.Model
+namespace ChatApp.Domain.Model
 {
     public class Message
     {
         public int Id { get; set; }
-
+        
         public DateTime CreateDate { get; set; }
-
         public string Text { get; set; }
 
         public int SenderUserId { get; set; }
