@@ -42,7 +42,10 @@ namespace ChatApp.Api
                 return new UnitOfWork(dbContext);
             });
 
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddMemoryCache();
+            services.AddScoped<UserRepository>();
+            services.AddScoped<IUserRepository, CachedUserRepository>();
+
             services.AddScoped<IMessageRepository, MessageRepository>();
 
             services.AddScoped<IMessagesAppService, MessagesAppService>();

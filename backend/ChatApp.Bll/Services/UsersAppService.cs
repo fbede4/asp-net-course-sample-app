@@ -1,4 +1,5 @@
 ﻿using ChatApp.Application.Interfaces;
+using ChatApp.Bll.Dtos;
 using ChatApp.Domain.Configuration;
 using ChatApp.Domain.Model;
 using ChatApp.Domain.Repositories;
@@ -42,6 +43,17 @@ namespace ChatApp.Bll.Services
             await unitOfWork.SaveChangesAsync();
 
             return entity.Id;
+        }
+
+        public async Task<UserDto> GetUserAsync(int id)
+        {
+            var user = await userRepository.GetUserAsync(id);
+
+            return new UserDto
+            {
+                Id = user.Id,
+                Name = user.Name
+            };
         }
     }
 }

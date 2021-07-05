@@ -1,4 +1,5 @@
 ﻿using ChatApp.Application.Interfaces;
+using ChatApp.Bll.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -18,6 +19,12 @@ namespace ChatApp.Api.Controllers
         public async Task<int> CreateUser(string name)
         {
             return await usersAppService.CreateUserAsync(name);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<UserDto> GetUserAsync(int id)
+        {
+            return await usersAppService.GetUserAsync(id);
         }
     }
 }
