@@ -1,11 +1,9 @@
+using Autofac;
+using ChatApp.Api.AutofacModules;
 using ChatApp.Api.Middlewares;
-using ChatApp.Application.Interfaces;
-using ChatApp.Bll.Services;
 using ChatApp.Dal;
-using ChatApp.Dal.Repositories;
 using ChatApp.Dal.UoW;
 using ChatApp.Domain.Configuration;
-using ChatApp.Domain.Repositories;
 using ChatApp.Domain.UoW;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,13 +41,6 @@ namespace ChatApp.Api
             });
 
             services.AddMemoryCache();
-            services.AddScoped<UserRepository>();
-            services.AddScoped<IUserRepository, CachedUserRepository>();
-
-            services.AddScoped<IMessageRepository, MessageRepository>();
-
-            services.AddScoped<IMessagesAppService, MessagesAppService>();
-            services.AddScoped<IUsersAppService, UsersAppService>();
 
             services.AddControllers();
 
@@ -57,6 +48,12 @@ namespace ChatApp.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ChatApp.Api", Version = "v1" });
             });
+        }
+
+        public void ConfigureContainer(ContainerBuilder container)
+        {
+            container.RegisterModule(new DalAutofacModule());
+            container.RegisterModule(new BllAutofacModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,3 +1,4 @@
+using Autofac.Extensions.DependencyInjection;
 using ChatApp.Dal;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,7 @@ namespace ChatApp.Api
                         .Enrich.FromLogContext()
                         .WriteTo.Console();
                 })
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
