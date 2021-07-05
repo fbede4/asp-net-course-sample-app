@@ -1,6 +1,8 @@
+using ChatApp.Api.Dal;
 using ChatApp.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,7 +22,12 @@ namespace ChatApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IMessageService, MockMessageService>();
+            services.AddDbContext<ChatAppDbContext>(opt =>
+            {
+                opt.UseSqlite("Data Source = chatapp.db");
+            });
+
+            services.AddScoped<IMessageService, MessageService>();
 
             services.AddControllers();
 
