@@ -1,6 +1,7 @@
 ﻿using ChatApp.Domain.Model;
 using ChatApp.Domain.Repositories;
 using Microsoft.Extensions.Caching.Memory;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ChatApp.Dal.Repositories
@@ -30,6 +31,16 @@ namespace ChatApp.Dal.Repositories
             memoryCache.Set($"{nameof(User)}.{id}", user);
             
             return user;
+        }
+
+        public Task<User> GetUserAsync(string name)
+        {
+            return userRepository.GetUserAsync(name);
+        }
+
+        public Task<List<User>> GetUsersAsync(string name)
+        {
+            return userRepository.GetUsersAsync(name);
         }
 
         public User Insert(User entity)

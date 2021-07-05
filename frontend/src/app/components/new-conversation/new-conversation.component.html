@@ -1,0 +1,26 @@
+<div style="height: auto">
+  <div mat-dialog-content *ngIf="users">
+    <mat-form-field>
+      <mat-label>Select User</mat-label>
+      <mat-select [(ngModel)]="selectedUser">
+        <mat-option *ngFor="let user of users" [value]="user">
+          {{ user.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button
+      class="btn btn-primary"
+      style="margin-right: 10px"
+      mat
+      mat-button
+      (click)="onCancelClick()"
+    >
+      Cancel
+    </button>
+    <button class="btn btn-primary" mat mat-button (click)="onOkClick()">
+      Ok
+    </button>
+  </div>
+</div>

@@ -15,7 +15,7 @@ namespace ChatApp.Dal.Repositories
         {
         }
 
-        public Task<List<Message>> GetMessages(Expression<Func<Message, bool>> predicate)
+        public Task<List<Message>> GetMessagesAsync(Expression<Func<Message, bool>> predicate)
         {
             return chatDbContext.Messages
                 .Where(predicate)

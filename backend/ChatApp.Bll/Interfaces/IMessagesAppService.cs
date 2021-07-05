@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace ChatApp.Application.Interfaces
+namespace ChatApp.Bll.Interfaces
 {
     public interface IMessagesAppService
     {
-        Task<List<string>> GetRecievedMessagesAsync(int userId);
-        Task<int> CreateMessageAsync(string message, int senderUserId, int recipientUserId);
+        Task SendMessageAsync(string message, int sentByUserId, int conversationId);
     }
 }

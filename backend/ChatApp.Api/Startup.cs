@@ -40,6 +40,14 @@ namespace ChatApp.Api
                 return new UnitOfWork(dbContext);
             });
 
+            services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+            {
+                builder
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowAnyOrigin();
+            }));
+
             services.AddMemoryCache();
 
             services.AddControllers();
@@ -68,11 +76,11 @@ namespace ChatApp.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ChatApp.Api v1"));
             }
 
+            app.UseCors("CorsPolicy");
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,10 +1,8 @@
-﻿using ChatApp.Application.Interfaces;
+﻿using ChatApp.Bll.Interfaces;
 using ChatApp.Domain.Model;
 using ChatApp.Domain.Repositories;
 using ChatApp.Domain.UoW;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ChatApp.Bll.Services
@@ -22,30 +20,17 @@ namespace ChatApp.Bll.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<List<string>> GetRecievedMessagesAsync(int userId)
-        {
-            var messages = await messageRepository.GetMessages(message => message.RecipientUserId == userId);
-
-            return messages
-                .Select(message => message.Text)
-                .ToList();
-        }
-
-        public async Task<int> CreateMessageAsync(string message, int senderUserId, int recipientUserId)
+        public async Task SendMessageAsync(string message, int sentByUserId, int conversationId)
         {
             var entity = new Message
             {
                 Text = message,
                 CreateDate = DateTime.Now,
-                SenderUserId = senderUserId,
-                RecipientUserId = recipientUserId
+                SentByUserId = sentByUserId,
+                ConversationId = conversationId
             };
-
             messageRepository.Insert(entity);
-
             await unitOfWork.SaveChangesAsync();
-
-            return entity.Id;
         }
     }
 }

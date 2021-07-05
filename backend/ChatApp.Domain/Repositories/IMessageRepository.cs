@@ -8,6 +8,6 @@ namespace ChatApp.Domain.Repositories
 {
     public interface IMessageRepository : IRepository<Message>
     {
-        Task<List<Message>> GetMessages(Expression<Func<Message, bool>> predicate);
+        Task<List<Message>> GetMessagesAsync(Expression<Func<Message, bool>> predicate);
     }
 }

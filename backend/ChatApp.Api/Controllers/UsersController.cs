@@ -1,6 +1,7 @@
-﻿using ChatApp.Application.Interfaces;
+﻿using ChatApp.Bll.Interfaces;
 using ChatApp.Bll.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ChatApp.Api.Controllers
@@ -15,16 +16,28 @@ namespace ChatApp.Api.Controllers
             this.usersAppService = usersAppService;
         }
 
-        [HttpPost]
-        public async Task<int> CreateUser(string name)
+        [HttpGet("search")]
+        public Task<List<UserDto>> GetUsers([FromQuery] string name)
         {
-            return await usersAppService.CreateUserAsync(name);
+            return usersAppService.GetUsersAsync(name);
+        }
+
+        [HttpPost("login/{name}")]
+        public Task<UserDto> Login(string name)
+        {
+            return usersAppService.LoginAsync(name);
         }
 
         [HttpGet("{id}")]
-        public async Task<UserDto> GetUserAsync(int id)
+        public Task<UserDto> GetUser(int id)
         {
-            return await usersAppService.GetUserAsync(id);
+            return usersAppService.GetUserAsync(id);
+        }
+
+        [HttpPost]
+        public Task<int> CreateUser(string name)
+        {
+            return usersAppService.CreateUserAsync(name);
         }
     }
 }
