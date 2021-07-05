@@ -1,4 +1,5 @@
-﻿using ChatApp.Bll.Interfaces;
+﻿using ChatApp.Bll.Hubs;
+using ChatApp.Bll.Interfaces;
 using ChatApp.Domain.Model;
 using ChatApp.Domain.Repositories;
 using ChatApp.Domain.UoW;
@@ -11,13 +12,16 @@ namespace ChatApp.Bll.Services
     {
         private readonly IMessageRepository messageRepository;
         private readonly IUnitOfWork unitOfWork;
+        private readonly IChatHub chatHub;
 
         public MessagesAppService(
             IMessageRepository messageRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IChatHub chatHub)
         {
             this.messageRepository = messageRepository;
             this.unitOfWork = unitOfWork;
+            this.chatHub = chatHub;
         }
 
         public async Task SendMessageAsync(string message, int sentByUserId, int conversationId)
@@ -31,6 +35,8 @@ namespace ChatApp.Bll.Services
             };
             messageRepository.Insert(entity);
             await unitOfWork.SaveChangesAsync();
+            
+            await chatHub.NewMessage();
         }
     }
 }

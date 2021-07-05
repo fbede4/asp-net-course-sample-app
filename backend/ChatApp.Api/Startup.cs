@@ -1,6 +1,8 @@
 using Autofac;
 using ChatApp.Api.AutofacModules;
+using ChatApp.Api.Hubs;
 using ChatApp.Api.Middlewares;
+using ChatApp.Bll.Hubs;
 using ChatApp.Dal;
 using ChatApp.Dal.UoW;
 using ChatApp.Domain.Configuration;
@@ -29,6 +31,9 @@ namespace ChatApp.Api
         {
             services.Configure<UserHandlingConfiguration>(Configuration.GetSection("UserHandling"));
 
+            services.AddSignalR();
+            services.AddTransient<IChatHub, ChatHubAdapter>();
+
             services.AddDbContext<ChatAppDbContext>(opt =>
             {
                 opt.UseSqlite("Data Source = chatapp.db");
@@ -40,12 +45,15 @@ namespace ChatApp.Api
                 return new UnitOfWork(dbContext);
             });
 
+            var corsConfigSection = Configuration.GetSection("Cors");
+            var corsConfig = corsConfigSection.Get<CorsConfiguration>();
             services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
             {
                 builder
                     .AllowAnyMethod()
                     .AllowAnyHeader()
-                    .AllowAnyOrigin();
+                    .WithOrigins(corsConfig?.AllowedOrigins)
+                    .AllowCredentials();
             }));
 
             services.AddMemoryCache();
@@ -78,13 +86,12 @@ namespace ChatApp.Api
 
             app.UseCors("CorsPolicy");
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("hubs/chat");
             });
         }
     }

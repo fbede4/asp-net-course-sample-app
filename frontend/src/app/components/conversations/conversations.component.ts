@@ -43,7 +43,7 @@ export class ConversationsComponent implements OnInit {
     }
     this.userId = +userId;
 
-    //this.initializeSignalR();
+    this.initializeSignalR();
 
     await this.getConversations();
 
@@ -52,7 +52,7 @@ export class ConversationsComponent implements OnInit {
 
   initializeSignalR(): void {
     this.connection = this.signalRService.createConnection();
-    this.connection.on('Chat', async () => {
+    this.connection.on('NewMessage', async () => {
       await this.reloadConversations();
     });
     SignalRService.start(this.connection);
